@@ -1,27 +1,22 @@
 {
-  "name": "ros2-humble",
+  "name": "ros2-humble-final",
   "build": { "dockerfile": "Dockerfile" },
   "runArgs": [
+    "--runtime=nvidia",
     "--gpus", "all",
-    "--network=host"
+    "--network=host",
+    "--ipc=host"
   ],
-  "customizations": {
-    "vscode": {
-      "extensions": ["ms-iot.vscode-ros", "ms-vscode.cpptools", "ms-python.python"]
-    }
-  },
-  "remoteUser": "root",
   "containerEnv": {
-    "DISPLAY": "${localEnv:DISPLAY}",
-    "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
-    "XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
-    "PULSE_SERVER": "${localEnv:PULSE_SERVER}",
+    "DISPLAY": ":0",
     "NVIDIA_VISIBLE_DEVICES": "all",
-    "NVIDIA_DRIVER_CAPABILITIES": "all"
+    "NVIDIA_DRIVER_CAPABILITIES": "all",
+    "LD_LIBRARY_PATH": "/usr/lib/wsl/lib:${env:LD_LIBRARY_PATH}",
+    "OGRE_RTT_MODE": "Copy",
+    "QT_X11_NO_MITSHM": "1"
   },
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
-    "source=${localEnv:XDG_RUNTIME_DIR},target=${localEnv:XDG_RUNTIME_DIR},type=bind"
+    "source=/usr/lib/wsl,target=/usr/lib/wsl,type=bind,consistency=readonly"
   ]
 }
-
